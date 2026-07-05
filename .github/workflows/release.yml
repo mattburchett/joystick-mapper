@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build Linux (amd64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false # dependencies are vendored
+
+      - name: Install Fyne build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            gcc libgl1-mesa-dev xorg-dev libxkbcommon-dev
+
+      - name: Build
+        env:
+          CGO_ENABLED: "1"
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go build -mod=vendor -trimpath -ldflags "-s -w" \
+            -o joystick-mapper-linux-amd64 .
+
+      - name: Attach to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: joystick-mapper-linux-amd64
+
+  build-windows:
+    name: Build Windows (amd64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false # dependencies are vendored
+
+      - name: Build
+        env:
+          CGO_ENABLED: "1"
+          GOOS: windows
+          GOARCH: amd64
+        # -H=windowsgui prevents a console window from opening alongside the GUI
+        run: |
+          go build -mod=vendor -trimpath -ldflags "-s -w -H=windowsgui" -o joystick-mapper-windows-amd64.exe .
+
+      - name: Attach to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: joystick-mapper-windows-amd64.exe

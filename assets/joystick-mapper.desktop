@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Joystick Mapper
+Comment=Map joystick buttons and axes to programmable keyboard sequences
+Exec=joystick-mapper
+Icon=joystick-mapper
+Terminal=false
+Categories=Utility;Game;
+Keywords=joystick;gamepad;HOTAS;macro;keyboard;mapper;
