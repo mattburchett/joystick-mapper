@@ -71,6 +71,17 @@ go build -mod=vendor -ldflags -H=windowsgui .
 
 Dependencies are vendored; no network access is needed to build.
 
+## Packaging
+
+- **Arch Linux**: a `PKGBUILD` is included at the repo root — `makepkg -si`.
+- **Void Linux**: an xbps-src `template` is included at the repo root. Copy
+  it to `srcpkgs/joystick-mapper/template` in a
+  [void-packages](https://github.com/void-linux/void-packages) checkout and
+  run `./xbps-src pkg joystick-mapper`.
+
+Both build from the `v${version}` release tarball with vendored
+dependencies and install the binary, desktop entry, icon, and license.
+
 ## Releases
 
 Pushing a `v*` tag runs the GitHub Actions release workflow, which attaches

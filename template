@@ -1,0 +1,27 @@
+# Template file for 'joystick-mapper' (Void Linux xbps-src).
+# To build: copy to srcpkgs/joystick-mapper/template in a void-packages
+# checkout, then run: ./xbps-src pkg joystick-mapper
+pkgname=joystick-mapper
+version=0.1.0
+revision=1
+build_style=go
+go_import_path=github.com/mattburchett/joystick-mapper
+go_mod_mode=vendor
+go_ldflags="-s -w"
+hostmakedepends="pkg-config"
+makedepends="libglvnd-devel libX11-devel libXcursor-devel libXi-devel
+ libXinerama-devel libXrandr-devel libXxf86vm-devel"
+short_desc="Map joystick buttons and axes to programmable keyboard sequences"
+maintainer="Matt Burchett <mattburchett@users.noreply.github.com>"
+license="MIT"
+homepage="https://github.com/mattburchett/joystick-mapper"
+distfiles="https://github.com/mattburchett/joystick-mapper/archive/v${version}.tar.gz"
+checksum=aa0b3269fe3ec8f3b1c2660d5934221d3bb6ae0d47a2dd52a1c7b540f1929d12
+
+export CGO_ENABLED=1
+
+post_install() {
+	vlicense LICENSE
+	vinstall assets/joystick-mapper.desktop 644 usr/share/applications
+	vinstall assets/icon.png 644 usr/share/icons/hicolor/128x128/apps joystick-mapper.png
+}
